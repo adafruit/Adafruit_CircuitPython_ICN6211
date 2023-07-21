@@ -222,7 +222,7 @@ class ICN6211:
     mipi_max_size = UnaryStruct(_REG_MIPI_MAX_SIZE_L, ">H")
 
     mipi_line_div_en = RWBit(_REG_DSI_CTRL, 7)
-    mipi_bit_swap = RWBits(3, _REG_DSI_CTRL, 6)
+    mipi_bit_swap = RWBit(_REG_DSI_CTRL, 6)
     mipi_crc_en = RWBit(_REG_DSI_CTRL, 5)
     mipi_8B9B_en = RWBit(_REG_DSI_CTRL, 4) #not used by IC according to datasheet
     mipi_video_mode = RWBits(2, _REG_DSI_CTRL, 2) #not used by IC according to datasheet
@@ -286,6 +286,9 @@ class ICN6211:
 
     def set_vertical_back_porch(self, value):
         self.vbp = value
+        
+    def set_test_mode(self, mode: BIST_MODE):
+        self.bist_mode = mode
 
     
 
