@@ -136,6 +136,13 @@ class OUT_BIT_SWAP:
     MODE_888_7_0_to_7_0 = 0x04
     MODE_888_7_0_to_0_7 = 0x05
 
+class MIPI_LANE_NUM:
+    ONE_LANE = 0x00
+    TWO_LANE = 0x01
+    THREE_LANE = 0x02
+    FOUR_LANE = 0x03
+
+
 class ICN6211:
 
     def __init__(self, i2c_bus: I2C, addr: int = 0x2C) -> None:
@@ -289,6 +296,7 @@ class ICN6211:
         
     def set_test_mode(self, mode: BIST_MODE):
         self.bist_mode = mode
+        self.bist_gen = 1
 
     
 

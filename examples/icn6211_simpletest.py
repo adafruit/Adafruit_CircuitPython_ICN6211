@@ -11,7 +11,7 @@ import busio
 from adafruit_extended_bus import ExtendedI2C as I2C
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from adafruit_icn6211 import ICN6211, OUT_RGB_SWAP
+from adafruit_icn6211 import ICN6211, OUT_RGB_SWAP, BIST_MODE
 
 print("hello blinka!")
 
@@ -24,3 +24,6 @@ icn.out_rgb_swap = OUT_RGB_SWAP.RGB
 icn.save_config()
 icn.soft_reset()
 print(icn.device_id)
+icn.set_test_mode(BIST_MODE.CHESSBOARD)
+icn.save_config()
+icn.soft_reset()
