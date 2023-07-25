@@ -10,10 +10,11 @@ import board
 import busio
 from adafruit_extended_bus import ExtendedI2C as I2C
 
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from adafruit_icn6211 import ICN6211, BIST_MODE, OUT_RGB_SWAP, OUT_BIT_SWAP, MIPI_LANE_NUM, PLL_OUT_DIV_RATIO, PLL_REF_CLK_DIV_RATIO, CLK_PHASE, PLL_REF_SEL
-
 i2c = I2C(0)
+
+# todo: fix module import, hack for development
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from adafruit_icn6211 import *
 
 # print("I2C devices found: ", [hex(i) for i in i2c.scan()])
 icn = ICN6211(i2c)
