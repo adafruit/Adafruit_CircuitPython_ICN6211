@@ -313,8 +313,13 @@ class ICN6211:
     pd_lpcd_force = RWBit(_REG_MIPI_PD_CK_LANE, 2)
     mipi_force_0 = UnaryStruct(_REG_MIPI_FORCE_0, ">B")
 
+    # todo: make register read back for getters instead of caching user parameters
+    _width = 0
+    _height = 0
+    _hfp = 0
+    _hsw = 0
+    _hbp = 0
 
-    
 
     def soft_reset(self):
         self.reset = 1
@@ -322,12 +327,25 @@ class ICN6211:
     def save_config(self):
         self.config_finish = 1
 
-    def set_resolution(self, width, height):
-        self.hactive_l = width & 0xFF
-        self.vactive_l = height & 0xFF
-        self.vactive_hactive_h = (width >> 8) | ((height >> 8) << 4)
+    @property
+    def resolution(self) -> tuple:
+        return (self._width, self._height)
 
-    def set_horizontal_front_porch(self, value):
+    @resolution.setter
+    def resolution(self, res: tuple):
+        self._width = res[0]
+        self._height = res[1]
+        self.hactive_l = self._width & 0xFF
+        self.vactive_l = self._height & 0xFF
+        self.vactive_hactive_h = (self._width >> 8) | ((self._height >> 8) << 4)
+
+    @property
+    def horizontal_front_porch(self) -> int:
+        return self._hfp
+
+    @horizontal_front_porch.setter
+    def horizontal_front_porch(self, value: int):
+        self._hfp = value
         self.hfp_l = value & 0xFF
         self.hfp_h = (value >> 8) << 4
         #taken from ICN config tool
@@ -336,26 +354,56 @@ class ICN6211:
         else:
             self.hfp_min = 0xFF
             
-
-
-    def set_horizontal_sync_width(self, value):
+    @property
+    def horizontal_sync_width(self) -> int:
+        return self._hsw
+    
+    @horizontal_sync_width.setter
+    def horizontal_sync_width(self, value: int):
+        self._hsw = value
         self.hsw_l = value & 0xFF
         self.hsw_h = (value >> 8) << 2
 
-    def set_horizontal_back_porch(self, value):
+    @property
+    def horizontal_back_porch(self) -> int:
+        return self._hbp
+    
+    @horizontal_back_porch.setter
+    def horizontal_back_porch(self, value: int):
+        self._hbp = value
         self.hbp_l = value & 0xFF
-        self.hbp_h = (value >> 8) << 0
+        self.hbp_h = (value >> 8)
 
-    def set_vertical_front_porch(self, value):
+    @property
+    def vertical_front_porch(self) -> int:
+        return self.vfp
+    
+    @vertical_front_porch.setter
+    def vertical_front_porch(self, value: int):
         self.vfp = value
 
-    def set_vertical_sync_width(self, value):
+    @property
+    def vertical_sync_width(self) -> int:
+        return self.vsw
+    
+    @vertical_sync_width.setter
+    def vertical_sync_width(self, value: int):
         self.vsw = value
 
-    def set_vertical_back_porch(self, value):
+    @property
+    def vertical_back_porch(self) -> int:
+        return self.vbp
+    
+    @vertical_back_porch.setter
+    def vertical_back_porch(self, value: int):
         self.vbp = value
-        
-    def set_test_mode(self, mode: BIST_MODE):
+    
+    @property
+    def test_mode(self) -> BIST_MODE:
+        return self.bist_mode
+    
+    @test_mode.setter
+    def test_mode(self, mode: BIST_MODE):
         self.bist_mode = mode
         if(mode == BIST_MODE.DISABLE):
             self.enable_test_mode = 0x00

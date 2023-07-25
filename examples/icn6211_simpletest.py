@@ -19,18 +19,17 @@ from adafruit_icn6211 import *
 # print("I2C devices found: ", [hex(i) for i in i2c.scan()])
 icn = ICN6211(i2c)
 
-# icn.out_rgb_swap = OUT_RGB_SWAP.RGB
 # print(icn.device_id)
-# icn.set_test_mode(BIST_MODE.DISABLE)
+# icn.test_mode = BIST_MODE.COLORBAR
 
 icn.de_pol = True
-icn.set_resolution(800,480)
-icn.set_horizontal_front_porch(40)
-icn.set_horizontal_sync_width(40)
-icn.set_horizontal_back_porch(40)
-icn.set_vertical_front_porch(10)
-icn.set_vertical_sync_width(10)
-icn.set_vertical_back_porch(10)
+icn.resolution = (800,480)
+icn.horizontal_front_porch = 40
+icn.horizontal_sync_width = 40
+icn.horizontal_back_porch = 40
+icn.vertical_front_porch = 10
+icn.vertical_sync_width = 10
+icn.vertical_back_porch = 10
 icn.sync_event_delay = 128
 icn.pd_ck_term_force = True
 icn.pd_ck_hsrx_force = True
