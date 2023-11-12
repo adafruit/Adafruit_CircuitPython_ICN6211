@@ -8,13 +8,11 @@ import sys
 import os
 import board
 import busio
+from adafruit_icn6211 import *
+# for use on Linux/Raspberry Pi
 from adafruit_extended_bus import ExtendedI2C as I2C
 
 i2c = I2C(0)
-
-# todo: fix module import, hack for development
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from adafruit_icn6211 import *
 
 # print("I2C devices found: ", [hex(i) for i in i2c.scan()])
 icn = ICN6211(i2c)
@@ -50,7 +48,7 @@ icn.mipi_xor = True #not documented what it does, taken from config tool
 icn.save_config()
 
 # icn.soft_reset()
-icn.dump_registers()
+# icn.dump_registers()
 icn.print_errors()
 icn.reset_errors()
 

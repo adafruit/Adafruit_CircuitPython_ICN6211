@@ -251,8 +251,11 @@ class ICN6211:
     det_lock_sel = RWBit(_REG_PLL_INT_1, 2)
 
     pll_out_divide_ratio = RWBits(2, _REG_PLL_REF_DIV, 5)
+    pll_post_divide = pll_out_divide_ratio
     pll_ref_clk_divide_ratio = RWBits(4, _REG_PLL_REF_DIV, 0)
+    pll_pre_divide = pll_ref_clk_divide_ratio
     pll_ref_clk_extra_divide = RWBit(_REG_PLL_REF_DIV, 4)
+    pll_pre_extra_divide = pll_ref_clk_extra_divide
 
     mipi_cfg_pw = UnaryStruct(_REG_MIPI_CFG_PW, ">B")
     gpio_0_sel = UnaryStruct(_REG_GPIO_0_SEL, ">B")
@@ -319,6 +322,8 @@ class ICN6211:
     _hfp = 0
     _hsw = 0
     _hbp = 0
+    _pll_multi = 0
+    _pll_frac = 0
 
 
     def soft_reset(self):
@@ -328,9 +333,30 @@ class ICN6211:
         self.config_finish = 1
 
     @property
+    def pll_multiplier(self) -> int:
+        self._pll_multi = value
+    
+    @pll_multiplier.setter
+    def pll_multiplier(self, value: int):
+        self._pll_multi = value
+        self.pll_int_0 = value & 0xFF
+        self.pll_int_1 = (value >> 8) << 6
+
+    @property
+    def pll_fraction(self) -> int:
+        return self._pll_frac
+    
+    @pll_fraction.setter
+    def pll_fraction(self, value: int):
+        self._pll_frac = value
+        self.pll_frac_0 = value & 0xFF
+        self.pll_frac_1 = (value >> 8) & 0xFF
+        self.pll_frac_2 = (value >> 16) & 0xFF
+    
+    @property
     def resolution(self) -> tuple:
         return (self._width, self._height)
-
+    
     @resolution.setter
     def resolution(self, res: tuple):
         self._width = res[0]
