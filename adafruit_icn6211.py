@@ -251,9 +251,9 @@ class ICN6211:
     det_lock_sel = RWBit(_REG_PLL_INT_1, 2)
 
     pll_out_divide_ratio = RWBits(2, _REG_PLL_REF_DIV, 5)
-    pll_post_divide = pll_out_divide_ratio
+    pll_post_divide_ratio = pll_out_divide_ratio
     pll_ref_clk_divide_ratio = RWBits(4, _REG_PLL_REF_DIV, 0)
-    pll_pre_divide = pll_ref_clk_divide_ratio
+    pll_pre_divide_ratio = pll_ref_clk_divide_ratio
     pll_ref_clk_extra_divide = RWBit(_REG_PLL_REF_DIV, 4)
     pll_pre_extra_divide = pll_ref_clk_extra_divide
 
@@ -352,6 +352,17 @@ class ICN6211:
         self.pll_frac_0 = value & 0xFF
         self.pll_frac_1 = (value >> 8) & 0xFF
         self.pll_frac_2 = (value >> 16) & 0xFF
+    
+    @property
+    def pll_divider(self) -> int:
+        return self._pll_div
+    
+    @pll_divider.setter
+    def pll_divider(self, value: int):
+        self._pll_div = value
+        self.pll_div_0 = value & 0xFF
+        self.pll_div_1 = (value >> 8) & 0xFF
+        self.pll_div_2 = (value >> 16) & 0xFF
     
     @property
     def resolution(self) -> tuple:
